@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "fonts": [
+      {
+        "asset": "./assets/fonts/PlusJakartaSans-Bold.ttf",
+        "family": "PlusJakartaSans-Bold"
+      },
+      {
+        "asset": "./assets/fonts/PlusJakartaSans-Regular.ttf",
+        "family": "PlusJakartaSans-Regular"
+      }
+    ]
+  }
+} 

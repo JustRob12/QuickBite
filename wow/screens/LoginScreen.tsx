@@ -6,9 +6,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 interface Props {
     navigation: any;
+    setUserName: (name: string) => void;
 }
 
-const LoginScreen: React.FC<Props> = ({ navigation }) => {
+const LoginScreen: React.FC<Props> = ({ navigation, setUserName }) => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -17,7 +18,9 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         try {
             const response = await axios.post("http://192.168.1.8:5000/api/auth/login", { email, password });
             await AsyncStorage.setItem("token", response.data.token);
+            setUserName(response.data.name);
             Alert.alert("Login successful");
+            navigation.navigate('Home');
         } catch (error: any) {
             Alert.alert("Login failed", error.response?.data?.message || error.message);
         }
@@ -91,23 +94,26 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
+        padding: 20,
         backgroundColor: '#fff',
     },
     logoContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
+        paddingVertical: 20,
 
     },
     logoQuick: {
         fontFamily: 'PlusJakartaSans-ExtraBold',
         fontSize: 48,
         color: '#C17F12',
+        
     },
     logoBites: {
         fontFamily: 'PlusJakartaSans-ExtraBold',
         fontSize: 48,
         color: '#000000',
+    
     },
     logoSubtitle: {
         textAlign: 'center',

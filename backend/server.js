@@ -14,7 +14,11 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 // Import routes
 const authRoutes = require("./routes/auth");
+const mealRoutes = require("./routes/meals");
+const groceryRoutes = require("./routes/groceries");
 app.use("/api/auth", authRoutes);
+app.use("/api/meals", mealRoutes);
+app.use("/api/groceries", groceryRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

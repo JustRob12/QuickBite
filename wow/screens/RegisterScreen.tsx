@@ -18,7 +18,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         'PlusJakartaSans-ExtraBold': require('../assets/fonts/PlusJakartaSans-ExtraBold.ttf'),
     });
 
-    console.log('Fonts loaded:', fontsLoaded);
+  
 
     if (!fontsLoaded) {
         return <Text>Loading...</Text>; // Show something while loading
@@ -26,7 +26,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 
     const register = async () => {
         try {
-            const response = await axios.post("http://192.168.1.8:5000/api/auth/register", { name, email, password });
+            const response = await axios.post("http://192.168.1.2:5000/api/auth/register", { name, email, password });
 
             // Check if registration was successful
             if (response.status === 201) {
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         backgroundColor: 'white',
+        justifyContent: 'center'
     },
     logoContainer: {
         flexDirection: 'row',

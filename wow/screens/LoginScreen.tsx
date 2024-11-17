@@ -13,16 +13,29 @@ const LoginScreen: React.FC<Props> = ({ navigation, setUserName }) => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const login = async () => {
+    const handleLogin = async () => {
         try {
-            const response = await axios.post("http://192.168.1.8:5000/api/auth/login", { email, password });
-            await AsyncStorage.setItem("token", response.data.token);
-            setUserName(response.data.name);
-            Alert.alert("Login successful");
-            navigation.navigate('Home');
-        } catch (error: any) {
-            Alert.alert("Login failed", error.response?.data?.message || error.message);
+            const response = await axios.post("http://192.168.1.2:5000/api/auth/login", {
+                email,
+                password,
+            });
+
+            if (response.status === 200) {
+                await AsyncStorage.setItem('token', response.data.token);
+                await AsyncStorage.setItem('name', response.data.name);
+                setUserName(response.data.name);
+                navigation.navigate('Home', { name: response.data.name });
+            } else {
+                setError('Login failed. Please try again.');
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                setError(`Error: ${error.response.data.message || 'Invalid credentials'}`);
+            } else {
+                setError('Network error. Please check your connection.');
+            }
         }
     };
 
@@ -60,7 +73,7 @@ const LoginScreen: React.FC<Props> = ({ navigation, setUserName }) => {
 
             <TouchableOpacity 
                 style={styles.loginButton} 
-                onPress={login}
+                onPress={handleLogin}
             >
                 <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
@@ -87,6 +100,8 @@ const LoginScreen: React.FC<Props> = ({ navigation, setUserName }) => {
                     <Text style={styles.signupLink}>Sign up</Text>
                 </TouchableOpacity>
             </View>
+
+            {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
     );
 };
@@ -96,6 +111,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         backgroundColor: '#fff',
+        justifyContent: 'center'
     },
     logoContainer: {
         flexDirection: 'row',
@@ -207,6 +223,10 @@ const styles = StyleSheet.create({
     signupLink: {
         color: '#C17F12',
         fontWeight: '600',
+    },
+    errorText: {
+        color: 'red',
+        marginBottom: 16,
     },
 });
 
